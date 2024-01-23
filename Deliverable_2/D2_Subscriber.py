@@ -1,20 +1,52 @@
+
+import random
+import time
+
 import paho.mqtt.client as mqtt
-import time as time
-# use public broker
-mqttBroker = "broker.hivemq.com"
-client = mqtt.Client("test_client_xix277_2") # my client name
-client.connect(mqttBroker)
-
-#subscribe to receive message
-client.loop_start()
-client.subscribe("Test_msg_xix277")
-client.on_message = on_message # call a function
 
 
 
-def on_message(client, userdata, message):
-    b = message.payload.decode("utf-8")
-    print("message received", b)
+broker = 'broker.hivemq.com'
+# port = 1883
+topic = "Try_this_on_for_size_xix277"
+# generate client ID with pub prefix randomly
+# client_id = f'python-mqtt-{random.randint(0, 1000)}'
+client_id = "test_xix277"
+# username = 'emqx'
+# password = 'public'
 
-time.sleep(15)
-client.loop_stop()
+
+def connect_mqtt() -> mqtt:
+    def on_connect(client, userdata, flags, rc):
+        if rc == 0:
+            print("Connected to MQTT Broker!")
+        else:
+            print("Failed to connect, return code %d\n", rc)
+
+    client = mqtt.Client(client_id)
+    # client.username_pw_set(username, password)
+    client.on_connect = on_connect
+    client.connect(broker)
+    return client
+
+
+def subscribe(client: mqtt):
+    def on_message(client, userdata, msg):
+        print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
+
+    client.subscribe(topic)
+    client.on_message = on_message
+
+
+def run():
+    try:
+        client = connect_mqtt()
+        subscribe(client)
+        client.loop_forever()
+    except KeyboardInterrupt:
+        client.loop_stop()
+        client.disconnect()
+        print("Disconnected")
+
+if __name__ == '__main__':
+    run()
