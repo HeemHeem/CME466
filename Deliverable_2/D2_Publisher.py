@@ -4,13 +4,8 @@ import time
 import paho.mqtt.client as mqtt
 
 broker = 'broker.hivemq.com'
-# port = 1883
 topic = "Try_this_on_for_size_xix277"
-# generate client ID with pub prefix randomly
-# client_id = f'python-mqtt-{random.randint(0, 1000)}'
 client_id = "test_xix277"
-# username = 'emqx'
-# password = 'public'
 
 def connect_mqtt():
     def on_connect(client, userdata, flags, rc):
@@ -43,6 +38,7 @@ def publish(client):
     except KeyboardInterrupt:
         client.disconnect()
         client.loop_stop()
+        print("\nDisconnected")
 
 def run():
     client = connect_mqtt()
