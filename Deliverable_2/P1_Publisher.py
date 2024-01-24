@@ -25,15 +25,19 @@ def connect_mqtt():
 def publish(client):
     msg_count = 0
     try:
+        msg_retain = json.dumps("Welcome to pain land")
+        # client.publish(topic, msg_retain, qos=0, retain=True) #for setting the retain flag
+        client.publish(topic, None, qos=0, retain=True) #for cleaing retain flag
+        client.publish(topic, json.dumps("hello"), qos=2, retain=True)
         while True:
             time.sleep(1)
             # msg = f"messages: {msg_count}"
             my_list = [14, 23, 43, 55, 60]
             # msg = json.dumps(my_list) # encode data
-            msg = json.dumps("CHEESE")
+            # msg = json.dumps("CHEESE")
             msg = json.dumps("Lucis")
             # result = client.publish(topic,msg, qos=1, retain=True)
-            result = client.publish(topic, msg, qos=1, retain=False)
+            result = client.publish(topic, msg, qos=0, retain=False)
             # result = client.publish(topic, None, retain=True)
             # result: [0, 1]
             status = result[0]
