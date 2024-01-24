@@ -1,11 +1,12 @@
 import random
 import time
+import json as json
 
 import paho.mqtt.client as mqtt
 
 broker = 'broker.hivemq.com'
 topic = "Try_this_on_for_size_xix277"
-client_id = "test_xix277"
+client_id = "test_xix277_1"
 
 def connect_mqtt():
     def on_connect(client, userdata, flags, rc):
@@ -14,7 +15,7 @@ def connect_mqtt():
         else:
             print("Failed to connect, return code %d\n", rc)
 
-    client = mqtt.Client("")
+    client = mqtt.Client(client_id)
     # client.username_pw_set(username, password)
     client.on_connect = on_connect
     client.connect(broker)
@@ -26,8 +27,14 @@ def publish(client):
     try:
         while True:
             time.sleep(1)
-            msg = f"messages: {msg_count}"
-            result = client.publish(topic, msg)
+            # msg = f"messages: {msg_count}"
+            my_list = [14, 23, 43, 55, 60]
+            # msg = json.dumps(my_list) # encode data
+            msg = json.dumps("CHEESE")
+            msg = json.dumps("Lucis")
+            # result = client.publish(topic,msg, qos=1, retain=True)
+            result = client.publish(topic, msg, qos=1, retain=False)
+            # result = client.publish(topic, None, retain=True)
             # result: [0, 1]
             status = result[0]
             if status == 0:
