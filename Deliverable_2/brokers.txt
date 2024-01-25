@@ -1,0 +1,4 @@
+broker.hivemq.com
+test.mosquitto.org
+broker.emqx.io
+public.mqtthq.com
