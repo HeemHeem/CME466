@@ -6,7 +6,11 @@ import json as json
 import paho.mqtt.client as mqtt
 
 broker = 'broker.hivemq.com'
-topic = "Pain Land 2024"
+# broker = 'test.mosquitto.org'
+# broker = "broker.emqx.io"
+# broker = "public.mqtthq.com"
+
+topic = "Pain Land 2024 2"
 client_id = "test_xix277_1"
 
 def connect_mqtt() -> mqtt.Client:
@@ -50,14 +54,14 @@ def publish(client):
             #create datetime object
             dt = datetime.datetime.now().timestamp()
             msg_in = dt
-            print(msg_in)
+            # print(msg_in)
             
             msg = json.dumps(msg_in) # message to be sent
 
             # UNCOMMENT FOR DIFFERENT QOS
             # result = client.publish(topic,msg, qos=0, retain=False)
             # result = client.publish(topic, msg, qos=1, retain=False)
-            result = client.publish(topic, msg, qos=2, retain=False)
+            result = client.publish(topic, msg, qos=1, retain=False)
             
             # result: [0, 1]
             status = result[0]
@@ -67,8 +71,8 @@ def publish(client):
                 print(f"Failed to send message to topic {topic}")
 
     except KeyboardInterrupt:
-        client.disconnect()
         client.loop_stop()
+        client.disconnect()
         print("\nDisconnected")
 
 def run():
