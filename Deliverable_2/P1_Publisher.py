@@ -9,6 +9,12 @@ topic = "Pain Land 2024"
 client_id = "test_xix277_1"
 
 def connect_mqtt() -> mqtt.Client:
+    """
+    connect to MQTT broker
+
+    return: client
+
+    """
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
             print("Connected to MQTT Broker!")
@@ -23,13 +29,16 @@ def connect_mqtt() -> mqtt.Client:
 
 
 def publish(client):
-
+    """
+    takes in a client object and publishes to the broker
+    return: None
+    """
     msg_retain = "Welcome to Pain Land"
     try:
 
         initial_msg = json.dumps(msg_retain)
         # client.publish(topic, initial_msg, qos=0, retain=True) #for setting the retain flag
-        client.publish(topic, None, qos=1, retain=True) #for clearing retain flag
+        # client.publish(topic, None, qos=1, retain=True) #for clearing retain flag
         
         while True:
             time.sleep(1)
