@@ -1,5 +1,6 @@
 import random
-import time
+import time as time
+import datetime as datetime
 import json as json
 
 import paho.mqtt.client as mqtt
@@ -44,9 +45,12 @@ def publish(client):
             time.sleep(1)
 
             ### Uncomment depending on what message you want to send
-            msg_in = random.sample(range(1, 50), 5) # generate 5 random numbers within the range of 1-50
+            # msg_in = random.sample(range(1, 50), 5) # generate 5 random numbers within the range of 1-50
             # msg_in = "The Realms of Pain will attenuate the train"
-            
+            #create datetime object
+            dt = datetime.datetime.now().timestamp()
+            msg_in = dt
+            print(msg_in)
             
             msg = json.dumps(msg_in) # message to be sent
 

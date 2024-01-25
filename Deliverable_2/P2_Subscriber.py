@@ -1,6 +1,6 @@
 
 import random
-import time
+import datetime as datetime
 import json as json
 import paho.mqtt.client as mqtt
 
@@ -60,9 +60,14 @@ def subscribe(client: mqtt):
     """
     def on_message(client, userdata, msg):
         json_decode_msg = json.loads(msg.payload) # decode json message
-        string_or_list_of_int(json_decode_msg)
-        print_second_element(json_decode_msg)
-        print(f"Received from '{msg.topic}' topic")
+        snd_time = json_decode_msg
+        print(snd_time)
+        rcv_time = datetime.datetime.now().timestamp()
+        # rcv_time_sec = datetime.datetime.strptime(rcv_time, "%S")
+        time_dif = (rcv_time - snd_time) * 1000
+        # string_or_list_of_int(json_decode_msg)
+        # print_second_element(json_decode_msg)
+        print(f"Received from '{time_dif}' ms topic")
 
 
     client.subscribe(topic)
