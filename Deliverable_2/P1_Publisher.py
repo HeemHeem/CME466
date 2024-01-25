@@ -5,10 +5,10 @@ import json as json
 import paho.mqtt.client as mqtt
 
 broker = 'broker.hivemq.com'
-topic = "Try_this_on_for_size_xix277"
+topic = "Pain Land 2024"
 client_id = "test_xix277_1"
 
-def connect_mqtt():
+def connect_mqtt() -> mqtt.Client:
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
             print("Connected to MQTT Broker!")
@@ -23,29 +23,36 @@ def connect_mqtt():
 
 
 def publish(client):
-    msg_count = 0
+
+    msg_retain = "Welcome to Pain Land"
     try:
-        msg_retain = json.dumps("Welcome to pain land")
-        # client.publish(topic, msg_retain, qos=0, retain=True) #for setting the retain flag
-        client.publish(topic, None, qos=0, retain=True) #for cleaing retain flag
-        client.publish(topic, json.dumps("hello"), qos=2, retain=True)
+
+        initial_msg = json.dumps(msg_retain)
+        # client.publish(topic, initial_msg, qos=0, retain=True) #for setting the retain flag
+        client.publish(topic, None, qos=1, retain=True) #for clearing retain flag
+        
         while True:
             time.sleep(1)
-            # msg = f"messages: {msg_count}"
-            my_list = [14, 23, 43, 55, 60]
-            # msg = json.dumps(my_list) # encode data
-            # msg = json.dumps("CHEESE")
-            msg = json.dumps("Lucis")
-            # result = client.publish(topic,msg, qos=1, retain=True)
-            result = client.publish(topic, msg, qos=0, retain=False)
-            # result = client.publish(topic, None, retain=True)
+
+            ### Uncomment depending on what message you want to send
+            msg_in = random.sample(range(1, 50), 5) # generate 5 random numbers within the range of 1-50
+            # msg_in = "The Realms of Pain will attenuate the train"
+            
+            
+            msg = json.dumps(msg_in) # message to be sent
+
+            # UNCOMMENT FOR DIFFERENT QOS
+            # result = client.publish(topic,msg, qos=0, retain=False)
+            # result = client.publish(topic, msg, qos=1, retain=False)
+            result = client.publish(topic, msg, qos=2, retain=False)
+            
             # result: [0, 1]
             status = result[0]
             if status == 0:
                 print(f"Send `{msg}` to topic `{topic}`")
             else:
                 print(f"Failed to send message to topic {topic}")
-            msg_count += 1
+
     except KeyboardInterrupt:
         client.disconnect()
         client.loop_stop()
