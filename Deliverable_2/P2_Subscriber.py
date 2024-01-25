@@ -6,9 +6,9 @@ import paho.mqtt.client as mqtt
 
 #comment
 
-broker = 'broker.hivemq.com'
+# broker = 'broker.hivemq.com'
 # broker = 'test.mosquitto.org'
-# broker = "broker.emqx.io"
+broker = "broker.emqx.io"
 # broker = "public.mqtthq.com"
 
 
@@ -81,11 +81,12 @@ def subscribe(client: mqtt):
 def run():
     try:
         client = connect_mqtt()
+        client.loop_start()
+        subscribe(client)
+        # client.loop_forever()
 
-        while True:
-            client.loop_start()
-            subscribe(client)
-
+        while True:            
+            pass
     except KeyboardInterrupt:
         client.loop_stop()
         client.disconnect()

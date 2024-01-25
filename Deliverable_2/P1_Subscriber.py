@@ -72,11 +72,11 @@ def subscribe(client: mqtt):
 def run():
     try:
         client = connect_mqtt()
+        client.loop_start()
+        subscribe(client)
 
         while True:
-            client.loop_start()
-            subscribe(client)
-
+            pass
     except KeyboardInterrupt:
         client.loop_stop()
         client.disconnect()

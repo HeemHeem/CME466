@@ -5,9 +5,9 @@ import json as json
 
 import paho.mqtt.client as mqtt
 
-broker = 'broker.hivemq.com'
+# broker = 'broker.hivemq.com'
 # broker = 'test.mosquitto.org'
-# broker = "broker.emqx.io"
+broker = "broker.emqx.io"
 # broker = "public.mqtthq.com"
 
 topic = "Pain Land 2024 2"
