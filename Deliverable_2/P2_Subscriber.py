@@ -6,8 +6,8 @@ import paho.mqtt.client as mqtt
 
 #comment
 
-broker = 'broker.hivemq.com'
-# broker = 'test.mosquitto.org'
+# broker = 'broker.hivemq.com'
+broker = 'test.mosquitto.org'
 # broker = "broker.emqx.io"
 # broker = "public.mqtthq.com"
 
@@ -56,7 +56,7 @@ def subscribe(client: mqtt):
         
         latency_time_ms = (rcv_time - snd_time) * 1000 # convert time to miliseconds
 
-        print(f"Latency from '{broker}' is '{latency_time_ms}' ms for topic '{topic}'")
+        print(f"Latency from '{broker}' is '{latency_time_ms:.2f}' ms for topic '{topic}'")
 
     client.subscribe(topic)
     client.on_message = on_message

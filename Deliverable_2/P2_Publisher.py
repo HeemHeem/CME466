@@ -4,8 +4,8 @@ import json as json
 from cryptography.fernet import Fernet
 import paho.mqtt.client as mqtt
 
-broker = 'broker.hivemq.com'
-# broker = 'test.mosquitto.org'
+# broker = 'broker.hivemq.com'
+broker = 'test.mosquitto.org'
 # broker = "broker.emqx.io"
 # broker = "public.mqtthq.com"
 
