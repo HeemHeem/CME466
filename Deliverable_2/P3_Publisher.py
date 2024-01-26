@@ -3,6 +3,7 @@ import datetime as datetime
 import json as json
 from cryptography.fernet import Fernet
 import paho.mqtt.client as mqtt
+import D1_SW_LED_and_Sound_Sensor as Edge_Sensor
 
 broker = 'broker.hivemq.com'
 # broker = 'test.mosquitto.org'
