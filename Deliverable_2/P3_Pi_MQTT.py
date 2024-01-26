@@ -10,6 +10,7 @@ import datetime as datetime
 import json as json
 from cryptography.fernet import Fernet
 import paho.mqtt.client as mqtt
+import math as m
 # import D1_SW_LED_and_Sound_Sensor as Edge_Sensor
 import PCF8591 as ADC
 import RPi.GPIO as GPIO
@@ -45,7 +46,9 @@ fern = Fernet(key) # create Fernet object
 
 # print(key)
 topic = "Pain Land 2024 2"
+topic2 = "Pain Land 2024 56"
 client_id = "test_xix277_1"
+client_id2 = "xix277"
 
 ################# IOT
 
@@ -184,7 +187,7 @@ def destroy():
 
 ###################################### PUBLISHER ##########################################
 
-def connect_mqtt() -> mqtt.Client:
+def connect_mqtt(client_id) -> mqtt.Client:
     """
     connect to MQTT broker
 
@@ -203,50 +206,103 @@ def connect_mqtt() -> mqtt.Client:
     client.connect(broker)
     return client
 
+def adc_to_dB(adc_val):
+    volts = (3.3/255) * adc_val
+    return -20*m.log(volts/3.3, 10)
 
-def publish(client):
+
+
+
+def publish(msg_in, client, topic):
+    msg = json.dumps(msg_in) # message to be sent
+    msg = fern.encrypt(msg.encode()) # encrypt message
+    result = client.publish(topic, msg, qos=0, retain=False)
+    status = result[0]
+    if status == 0:
+        print(f"Send `{msg_in:.2f}`dB to topic `{topic}`")
+    else:
+        print(f"Failed to send message to topic {topic}")
+
+
+def subscribe(client: mqtt, topic: str):
+    """
+    Subscribe to topic and display message
+
+    return: None
+    """
+    def on_message(client, userdata, msg):
+        global on_off
+        msg_rcv = msg.payload
+        msg_decode  = fern.decrypt(msg_rcv)
+        msg = json.loads(msg_decode) # decode send time from json message
+
+        # rcv_time = datetime.datetime.now().timestamp() # get current time
+        
+        # latency_time_ms = (rcv_time - snd_time) * 1000 # convert time to miliseconds
+
+        print(f"Sound Sensor Received {msg} from topic '{topic}'")
+
+        if msg == "ON":
+            on_off = True
+        elif msg == "OFF":
+            on_off = False
+
+
+    client.subscribe(topic)
+    client.on_message = on_message
+
+
+
+
+def loop(client_publisher, client_subscriber, topic_pub, topic_sub):
     """
     takes in a client object and publishes to the broker
     return: None
     """
+    global tmp
+    global on_off
     try:
-        
+        client_subscriber.loop_start()
+        # client_publisher.loop_start()
+        subscribe(client_subscriber, topic_sub)
         while True:
             time.sleep(0.1)
 
             #create datetime object
             # dt = datetime.datetime.now()
             # msg_in = dt.timestamp()
-            # switch()
-            # detect()    
-            # change_color_with_sound()
-            # Print(on_off)
-            msg_in = ADC.read(0)
-            if (msg_in < 75):
-                msg = json.dumps(msg_in) # message to be sent
-                msg = fern.encrypt(msg.encode()) # encrypt message
+            switch()
+            detect()    
+            change_color_with_sound()
+            Print(on_off)   
 
-                result = client.publish(topic, msg, qos=0, retain=False)
-            
-                # result: [0, 1]
-                status = result[0]
-                if status == 0:
-                    print(f"Send `{msg_in}` to topic `{topic}`")
-                else:
-                    print(f"Failed to send message to topic {topic}")
+            msg_in = ADC.read(0)
+
+            if(on_off):
+                if (msg_in < 75):
+                    msg_in = adc_to_dB(msg_in)
+                    publish(msg_in, client_publisher, topic_pub)
+                
+
 
     except KeyboardInterrupt:
-        client.loop_stop()
-        client.disconnect()
+        client_subscriber.loop_stop()
+        client_publisher.loop_stop()
+        client_subscriber.disconnect()
+        client_publisher.disconnect()
         destroy()
 
         print("\nDisconnected")
 
+
+
 def run():
 
-    client = connect_mqtt()
-    client.loop_start()
-    publish(client)
+    client_pub = connect_mqtt(client_id)
+    client_sub = connect_mqtt(client_id2)
+    loop(client_pub, client_sub, topic, topic2)
+    # client.loop_start()
+    # publish(client)
 
 
 

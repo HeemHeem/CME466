@@ -3,7 +3,7 @@ import datetime as datetime
 import json as json
 from cryptography.fernet import Fernet
 import paho.mqtt.client as mqtt
-import D1_SW_LED_and_Sound_Sensor as Edge_Sensor
+# import Deliverable_2.P3_Pi_MQTT as Edge_Sensor
 
 broker = 'broker.hivemq.com'
 # broker = 'test.mosquitto.org'
@@ -17,8 +17,9 @@ with open("key.txt", 'rb') as f:
 fern = Fernet(key) # create Fernet object
 
 # print(key)
-topic = "Pain Land 2024 2"
-client_id = "test_xix277_1"
+# topic = "Pain Land 2024 2"
+topic  = "Pain Land 2024 56"
+client_id = "test_xix277_2"
 
 def connect_mqtt() -> mqtt.Client:
     """
@@ -51,9 +52,9 @@ def publish(client):
             time.sleep(1)
 
             #create datetime object
-            dt = datetime.datetime.now()
-            msg_in = dt.timestamp()
-            
+            # dt = datetime.datetime.now()
+            # msg_in = dt.timestamp()
+            msg_in = input("Type ON or OFF to turn ON/OFF system: ")
             msg = json.dumps(msg_in) # message to be sent
             msg = fern.encrypt(msg.encode()) # encrypt message
 
@@ -62,7 +63,7 @@ def publish(client):
             # result: [0, 1]
             status = result[0]
             if status == 0:
-                print(f"Send `{dt}` to topic `{topic}`")
+                print(f"Send `{msg_in}` to topic `{topic}`")
             else:
                 print(f"Failed to send message to topic {topic}")
 

@@ -19,7 +19,7 @@ fern = Fernet(key) # create Fernet object
 # print(fern)
 
 topic = "Pain Land 2024 2"
-client_id = "test_xix277_2"
+client_id = "test_xix277_3"
 
 
 def connect_mqtt() -> mqtt.Client:
@@ -52,11 +52,11 @@ def subscribe(client: mqtt):
         snd_time = fern.decrypt(snd_time_encrypt)
         snd_time = json.loads(snd_time) # decode send time from json message
 
-        rcv_time = datetime.datetime.now().timestamp() # get current time
+        # rcv_time = datetime.datetime.now().timestamp() # get current time
         
         # latency_time_ms = (rcv_time - snd_time) * 1000 # convert time to miliseconds
 
-        print(f"Latency from '{broker}' is '{snd_time}' ms for topic '{topic}'")
+        print(f"Sound from '{broker}' is '{snd_time:.2f}' dB for topic '{topic}'")
 
     client.subscribe(topic)
     client.on_message = on_message

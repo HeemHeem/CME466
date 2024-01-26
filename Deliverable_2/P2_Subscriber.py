@@ -48,16 +48,25 @@ def subscribe(client: mqtt):
     return: None
     """
     def on_message(client, userdata, msg):
-        snd_time_encrypt = msg.payload
-        snd_time = fern.decrypt(snd_time_encrypt)
-        snd_time = json.loads(snd_time) # decode send time from json message
+        msg_rcv = msg.payload
+        # msg_decoded = fern.decrypt(msg_rcv)
+        # msg_in = json.loads(msg_decoded)
+        # print(f"Recieved '{msg_rcv.decode()[0]}' from topic '{topic}'")
 
-        rcv_time = datetime.datetime.now().timestamp() # get current time
-        
-        latency_time_ms = (rcv_time - snd_time) * 1000 # convert time to miliseconds
+        # print(json.loads(msg_rcv))
+        # msg_decoded = fern.decrypt(msg_rcv)
+        # msg_in = json.loads(msg_decoded)
+        if msg_rcv.decode()[0] != "$":
+            # snd_time = fern.decrypt(msg_rcv)
+            snd_time = json.loads(msg_rcv) # decode send time from json message
+            rcv_time = datetime.datetime.now().timestamp() # get current time
+            latency_time_ms = (rcv_time - snd_time) * 1000 # convert time to miliseconds
 
-        print(f"Latency from '{broker}' is '{latency_time_ms:.2f}' ms for topic '{topic}'")
-
+            print(f"Latency from '{broker}' is '{latency_time_ms:.2f}' ms for topic '{topic}'")
+        else:
+            msg_decoded = fern.decrypt(msg_rcv)
+            msg_in = json.loads(msg_decoded)
+            print(f"Recieved '{msg_in}' from topic '{topic}'")
     client.subscribe(topic)
     client.on_message = on_message
 

@@ -51,17 +51,19 @@ def publish(client):
 
             #create datetime object
             dt = datetime.datetime.now()
-            msg_in = dt.timestamp()
-            
-            msg = json.dumps(msg_in) # message to be sent
-            msg = fern.encrypt(msg.encode()) # encrypt message
+            time_smp = dt.timestamp()
+            time_smp = json.dumps(time_smp) # message to be sent
+            client.publish(topic, time_smp)
 
-            result = client.publish(topic, msg, qos=0, retain=False)
+            msg = json.dumps("WHAT TIME IS IT?")
+            msg_in = fern.encrypt(msg.encode()) # encrypt message
+
+            result = client.publish(topic, b"$" + msg_in, qos=1, retain=False)
             
             # result: [0, 1]
             status = result[0]
             if status == 0:
-                print(f"Send `{dt}` to topic `{topic}`")
+                print(f"Send `{msg}` to topic `{topic}`")
             else:
                 print(f"Failed to send message to topic {topic}")
 
@@ -72,7 +74,7 @@ def publish(client):
 
 def run():
     client = connect_mqtt()
-    client.loop_start()
+    # client.loop_start()
     publish(client)
 
 
