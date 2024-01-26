@@ -2,14 +2,21 @@ import random
 import time as time
 import datetime as datetime
 import json as json
-
+from cryptography.fernet import Fernet
 import paho.mqtt.client as mqtt
 
-# broker = 'broker.hivemq.com'
+broker = 'broker.hivemq.com'
 # broker = 'test.mosquitto.org'
-broker = "broker.emqx.io"
+# broker = "broker.emqx.io"
 # broker = "public.mqtthq.com"
 
+# encryption
+with open("key.txt", 'rb') as f:
+    key = f.read()
+
+fern = Fernet(key) # create Fernet object
+
+# print(key)
 topic = "Pain Land 2024 2"
 client_id = "test_xix277_1"
 
@@ -38,35 +45,24 @@ def publish(client):
     takes in a client object and publishes to the broker
     return: None
     """
-    msg_retain = "Welcome to Pain Land"
     try:
-
-        initial_msg = json.dumps(msg_retain)
-        # client.publish(topic, initial_msg, qos=0, retain=True) #for setting the retain flag
-        # client.publish(topic, None, qos=1, retain=True) #for clearing retain flag
         
         while True:
             time.sleep(1)
 
-            ### Uncomment depending on what message you want to send
-            # msg_in = random.sample(range(1, 50), 5) # generate 5 random numbers within the range of 1-50
-            # msg_in = "The Realms of Pain will attenuate the train"
             #create datetime object
-            dt = datetime.datetime.now().timestamp()
-            msg_in = dt
-            # print(msg_in)
+            dt = datetime.datetime.now()
+            msg_in = dt.timestamp()
             
             msg = json.dumps(msg_in) # message to be sent
-
-            # UNCOMMENT FOR DIFFERENT QOS
-            # result = client.publish(topic,msg, qos=0, retain=False)
-            # result = client.publish(topic, msg, qos=1, retain=False)
-            result = client.publish(topic, msg, qos=1, retain=False)
+            msg = fern.encrypt(msg.encode()) # encrypt message
+            
+            result = client.publish(topic, msg, qos=0, retain=False)
             
             # result: [0, 1]
             status = result[0]
             if status == 0:
-                print(f"Send `{msg}` to topic `{topic}`")
+                print(f"Send `{dt}` to topic `{topic}`")
             else:
                 print(f"Failed to send message to topic {topic}")
 
