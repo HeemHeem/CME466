@@ -214,6 +214,9 @@ def adc_to_dB(adc_val):
 
 
 def publish(msg_in, client, topic):
+    """
+    publish message to topic and display message being sent
+    """
     msg = json.dumps(msg_in) # message to be sent
     msg = fern.encrypt(msg.encode()) # encrypt message
     result = client.publish(topic, msg, qos=0, retain=False)

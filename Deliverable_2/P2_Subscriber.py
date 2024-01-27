@@ -7,8 +7,8 @@ import paho.mqtt.client as mqtt
 #comment
 
 # broker = 'broker.hivemq.com'
-broker = 'test.mosquitto.org'
-# broker = "broker.emqx.io"
+# broker = 'test.mosquitto.org'
+broker = "broker.emqx.io"
 # broker = "public.mqtthq.com"
 
 #encryption
@@ -49,24 +49,37 @@ def subscribe(client: mqtt):
     """
     def on_message(client, userdata, msg):
         msg_rcv = msg.payload
-        # msg_decoded = fern.decrypt(msg_rcv)
-        # msg_in = json.loads(msg_decoded)
-        # print(f"Recieved '{msg_rcv.decode()[0]}' from topic '{topic}'")
+        
+        # UNCOMMENT FOR NO DECRYPTION
+        #################### No Decryption ####################
+        snd_time = json.loads(msg_rcv) # decode send time from json message
+        rcv_time = datetime.datetime.now().timestamp() # get current time
 
-        # print(json.loads(msg_rcv))
-        # msg_decoded = fern.decrypt(msg_rcv)
-        # msg_in = json.loads(msg_decoded)
-        if msg_rcv.decode()[0] != "$":
-            # snd_time = fern.decrypt(msg_rcv)
-            snd_time = json.loads(msg_rcv) # decode send time from json message
-            rcv_time = datetime.datetime.now().timestamp() # get current time
-            latency_time_ms = (rcv_time - snd_time) * 1000 # convert time to miliseconds
 
-            print(f"Latency from '{broker}' is '{latency_time_ms:.2f}' ms for topic '{topic}'")
-        else:
-            msg_decoded = fern.decrypt(msg_rcv)
-            msg_in = json.loads(msg_decoded)
-            print(f"Recieved '{msg_in}' from topic '{topic}'")
+        # UNCOMMENT FOR DECRYPTION
+        ########################### Decryption ####################
+        # msg_decoded = fern.decrypt(msg_rcv)
+        # # msg_in = json.loads(msg_decoded)
+        # snd_time = json.loads(msg_decoded) # decode send time from json message
+        # rcv_time = datetime.datetime.now().timestamp() # get current time
+
+        #####################################################################
+        latency_time_ms = (rcv_time - snd_time) * 1000 # convert time to miliseconds
+
+        # if msg_rcv.decode()[0] != "$":
+        #     # snd_time = fern.decrypt(msg_rcv)
+        #     snd_time = json.loads(msg_rcv) # decode send time from json message
+        #     rcv_time = datetime.datetime.now().timestamp() # get current time
+        #     latency_time_ms = (rcv_time - snd_time) * 1000 # convert time to miliseconds
+
+        # else:
+        #     msg_decoded = fern.decrypt(msg_rcv)
+        #     msg_in = json.loads(msg_decoded)
+        #     print(f"Recieved '{msg_in}' from topic '{topic}'")
+        print(f"Latency from '{broker}' is '{latency_time_ms:.2f}' ms for topic '{topic}'")
+        # print(f"Latency from '{broker}' is '{latency_time_ms:.2f}' ms for topic '{topic}' with encryption")
+
+
     client.subscribe(topic)
     client.on_message = on_message
 
@@ -74,12 +87,13 @@ def subscribe(client: mqtt):
 def run():
     try:
         client = connect_mqtt()
-        client.loop_start()
         subscribe(client)
-        # client.loop_forever()
+        # client.loop_start()
 
-        while True:            
-            pass
+        client.loop_forever()
+
+        # while True:            
+        #     pass
     except KeyboardInterrupt:
         client.loop_stop()
         client.disconnect()

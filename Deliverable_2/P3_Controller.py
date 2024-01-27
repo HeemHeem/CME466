@@ -51,9 +51,7 @@ def publish(client):
         while True:
             time.sleep(1)
 
-            #create datetime object
-            # dt = datetime.datetime.now()
-            # msg_in = dt.timestamp()
+            # send ON or OFF to control sound system on pi
             msg_in = input("Type ON or OFF to turn ON/OFF system: ")
             msg = json.dumps(msg_in) # message to be sent
             msg = fern.encrypt(msg.encode()) # encrypt message
