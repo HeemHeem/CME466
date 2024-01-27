@@ -1,8 +1,9 @@
 """
-CME466 Deliverable 1
+Deliverable 2
 Jason Xie
 xix277
 11255431
+
 
 """
 import time as time

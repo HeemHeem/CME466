@@ -1,3 +1,11 @@
+"""
+Deliverable 2
+Jason Xie
+xix277
+11255431
+
+
+"""
 import time as time
 import datetime as datetime
 import json as json
