@@ -377,7 +377,7 @@ class Ui_MainWindow(object):
         self.warning_on_button.setStyleSheet("QPushButton::hover{background-color: rgb(32, 74, 135);}\n"
 "QPushButton{background-color:rgb(222, 221, 218);}\n"
 "QPushButton::checked{background-color:rgb(119, 118, 123);}")
-        self.warning_on_button.setCheckable(True)
+        # self.warning_on_button.setCheckable(True)
         self.warning_on_button.setAutoExclusive(True)
         self.warning_on_button.setObjectName("warning_on_button")
         self.horizontalLayout_4.addWidget(self.warning_on_button)
@@ -425,7 +425,7 @@ class Ui_MainWindow(object):
         self.warning_off_button.setStyleSheet("QPushButton::hover{background-color: rgb(32, 74, 135);}\n"
 "QPushButton{background-color:rgb(222, 221, 218);}\n"
 "QPushButton::checked{background-color:rgb(119, 118, 123);}")
-        self.warning_off_button.setCheckable(True)
+        # self.warning_off_button.setCheckable(True)
         self.warning_off_button.setChecked(True)
         self.warning_off_button.setAutoExclusive(True)
         self.warning_off_button.setDefault(False)
