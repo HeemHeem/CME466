@@ -1,3 +1,11 @@
+"""
+Deliverable 2
+Jason Xie
+xix277
+11255431
+
+
+"""
 import random
 import time
 import json as json
