@@ -13,8 +13,8 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
         super(ParkingLotInterface,self).__init__()
         self.setupUi(self)
         self.warning_on_off_flg = False
-        self.warning_on_button.clicked.connect(self.turn_on_warning)
-        self.warning_off_button.clicked.connect(self.turn_on_warning)
+        self.warning_on_button.clicked.connect(self.turn_on_off_warning)
+        self.warning_off_button.clicked.connect(self.turn_on_off_warning)
         self.mqttBroker = ""
 
     def turn_on_off_warning(self):
@@ -23,7 +23,7 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
         # TODO: need to connect to LED
 
         # Turn on warning
-        if self.warning_on_button.isChecked() and not self.on_off:
+        if self.warning_on_button.isChecked() and not self.warning_on_off_flg:
             self.warning_on_light.setStyleSheet("background-color: rgba(0,200,0, 80%); border-radius: 25px")
             self.warning_off_light.setStyleSheet("background-color: rgba(200,0,0, 30%); border-radius:25px")
             self.warning_off_button.setChecked(False)
@@ -32,7 +32,7 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
             self.warning_on_light.setStyleSheet("background-color: rgba(0,200,0, 30%); border-radius: 25px")
         
         # Turn off Warning
-        if self.warning_off_button.isChecked() and self.on_off:
+        if self.warning_off_button.isChecked() and self.warning_on_off_flg:
             self.warning_off_light.setStyleSheet("background-color: rgba(200,0,0, 80%); border-radius: 25px")
             self.warning_on_light.setStyleSheet("background-color: rgba(0,200,0, 30%); border-radius:25px")
             self.warning_on_button.setChecked(False)
