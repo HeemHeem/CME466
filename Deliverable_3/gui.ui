@@ -828,7 +828,7 @@ QPushButton::checked{background-color:rgb(119, 118, 123);}</string>
                    <string>Warning ON</string>
                   </property>
                   <property name="checkable">
-                   <bool>true</bool>
+                   <bool>false</bool>
                   </property>
                   <property name="autoExclusive">
                    <bool>true</bool>
@@ -928,10 +928,10 @@ QPushButton::checked{background-color:rgb(119, 118, 123);}</string>
                    <string>Warning OFF</string>
                   </property>
                   <property name="checkable">
-                   <bool>true</bool>
+                   <bool>false</bool>
                   </property>
                   <property name="checked">
-                   <bool>true</bool>
+                   <bool>false</bool>
                   </property>
                   <property name="autoExclusive">
                    <bool>true</bool>
@@ -1054,6 +1054,19 @@ border-style: solid;
 border-color: white;
 border-width:2px;
 </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="SendDisplayMessage">
+            <property name="styleSheet">
+             <string notr="true">QPushButton::hover{background-color: rgb(32, 74, 135);}
+QPushButton{background-color:rgb(222, 221, 218);}
+QPushButton::checked{background-color:rgb(119, 118, 123);}
+QPushButton{border-radius:5px ; border-width: 1px; border-style: solid; border-color: white;}</string>
+            </property>
+            <property name="text">
+             <string>Send Message</string>
             </property>
            </widget>
           </item>

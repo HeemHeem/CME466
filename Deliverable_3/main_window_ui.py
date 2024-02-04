@@ -377,7 +377,7 @@ class Ui_MainWindow(object):
         self.warning_on_button.setStyleSheet("QPushButton::hover{background-color: rgb(32, 74, 135);}\n"
 "QPushButton{background-color:rgb(222, 221, 218);}\n"
 "QPushButton::checked{background-color:rgb(119, 118, 123);}")
-        # self.warning_on_button.setCheckable(True)
+        self.warning_on_button.setCheckable(False)
         self.warning_on_button.setAutoExclusive(True)
         self.warning_on_button.setObjectName("warning_on_button")
         self.horizontalLayout_4.addWidget(self.warning_on_button)
@@ -425,8 +425,8 @@ class Ui_MainWindow(object):
         self.warning_off_button.setStyleSheet("QPushButton::hover{background-color: rgb(32, 74, 135);}\n"
 "QPushButton{background-color:rgb(222, 221, 218);}\n"
 "QPushButton::checked{background-color:rgb(119, 118, 123);}")
-        # self.warning_off_button.setCheckable(True)
-        self.warning_off_button.setChecked(True)
+        self.warning_off_button.setCheckable(False)
+        self.warning_off_button.setChecked(False)
         self.warning_off_button.setAutoExclusive(True)
         self.warning_off_button.setDefault(False)
         self.warning_off_button.setObjectName("warning_off_button")
@@ -492,6 +492,13 @@ class Ui_MainWindow(object):
 "")
         self.Display_Board_Message_Box.setObjectName("Display_Board_Message_Box")
         self.verticalLayout_4.addWidget(self.Display_Board_Message_Box)
+        self.SendDisplayMessage = QtWidgets.QPushButton(self.frame_5)
+        self.SendDisplayMessage.setStyleSheet("QPushButton::hover{background-color: rgb(32, 74, 135);}\n"
+"QPushButton{background-color:rgb(222, 221, 218);}\n"
+"QPushButton::checked{background-color:rgb(119, 118, 123);}\n"
+"QPushButton{border-radius:5px ; border-width: 1px; border-style: solid; border-color: white;}")
+        self.SendDisplayMessage.setObjectName("SendDisplayMessage")
+        self.verticalLayout_4.addWidget(self.SendDisplayMessage)
         self.horizontalLayout.addWidget(self.frame_5)
         self.verticalLayout.addWidget(self.frame_3)
         MainWindow.setCentralWidget(self.centralwidget)
@@ -508,3 +515,4 @@ class Ui_MainWindow(object):
         self.warning_off_button.setText(_translate("MainWindow", "Warning OFF"))
         self.label_2.setText(_translate("MainWindow", "Temperature"))
         self.label_3.setText(_translate("MainWindow", "Display Board Message"))
+        self.SendDisplayMessage.setText(_translate("MainWindow", "Send Message"))
