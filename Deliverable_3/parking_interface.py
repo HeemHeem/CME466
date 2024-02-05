@@ -25,19 +25,22 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
 
         # client
         self.publisher_topic = "Parking Lot Message - xix277"
-        self.publisher_id = "Parking_Publisher"
+        self.publisher_id = "Parking_GUI_Publisher"
         self.publisher_client = None
         self.publisher_payload = {}
 
         self.subscriber_topic = "Parking Updates - xix277"
-        self.subscriber_id = "Parking_Subscriber"
+        self.subscriber_id = "Parking_GUI_Subscriber"
         self.subscriber_client = None
         self.subscriber_payload = {} # parking spots will be a list of True or False - True for empty, False for full
+        
+        self.mqttBroker = "broker.hivemq.com"
+        
+        # Parking
         self.current_parking_spots = [self.parking_1, self.parking_2, self.parking_3, self.parking_4, self.parking_5]
         self.which_parking_spots_full = [True, True, True, True, True]
         self.prev_warning_msg_feedback = ""
 
-        self.mqttBroker = "broker.hivemq.com"
         
         
         # events
