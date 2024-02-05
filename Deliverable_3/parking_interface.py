@@ -34,7 +34,7 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
         self.warning_on_off_flg = False
         self.warning_on_button.clicked.connect(self.turn_on_warning)
         self.warning_off_button.clicked.connect(self.turn_off_warning)
-        self.SendDisplayMessage.clicked.connect(self.sendtodisplay)
+        self.SendDisplayMessage.clicked.connect(self.SendToDisplay)
         
 
     def turn_on_warning(self):
@@ -114,7 +114,7 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
         self.subscriber_client.on_message = on_message
         self.subscriber_client.loop_start()
     
-    def sendtodisplay(self):
+    def SendToDisplay(self):
         """
         Send message to parking lot display board
         """
