@@ -114,7 +114,8 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
         Subscribe to incoming Payload
         """
         def on_message(client, userdata, msg):
-            self.subscriber_payload = json.loads(msg.payload)
+            self.subscriber_payload = json.loads(msg.payload)    
+            # self.temperature_textbox.setText(str(self.subscriber_payload))
             print(self.subscriber_payload)
 
 
@@ -132,7 +133,7 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
             self.publisher_payload["DisplayBoardMsg"] = msg
             self.__publish(msg)    
     
-    def closeEvent(self, a0: QCloseEvent) -> None:
+    def closeEvent(self, event: QCloseEvent) -> None:
         """
         Disconnect on close
         """
@@ -142,7 +143,7 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
         self.publisher_client.disconnect()
         print("Closed Subscriber")
         print("Closed Publisher")
-        a0.accept() # accept event
+        event.accept() # accept event
 
         
 
