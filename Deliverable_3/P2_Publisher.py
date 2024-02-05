@@ -61,7 +61,7 @@ def publish(client):
             #create datetime object
             # dt = datetime.datetime.now()
             # time_smp = dt.timestamp()
-            time_smp = {"Hello":"World"}
+            time_smp = {"Hello":"World", "Temperature": 23, "Parking_Spots":[False, True, False, True, False]}
             time_smp_json = json.dumps(time_smp) # message to be sent
             
 

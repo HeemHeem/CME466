@@ -70,7 +70,7 @@ class Ui_MainWindow(object):
         self.parking_1.setStyleSheet("background-color: rgba(55, 227, 28, 50%);\n"
 "border-radius: 10px;\n"
 "border-width: 1px;\n"
-"border-color:rgba(55, 227, 28, 50%);\n"
+"\n"
 "")
         self.parking_1.setObjectName("parking_1")
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.parking_1)
@@ -132,7 +132,7 @@ class Ui_MainWindow(object):
         self.parking_2.setStyleSheet("background-color: rgba(55, 227, 28, 50%);\n"
 "border-radius: 10px;\n"
 "border-width: 1px;\n"
-"border-color:rgba(55, 227, 28, 50%);\n"
+"\n"
 "")
         self.parking_2.setObjectName("parking_2")
         self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.parking_2)
@@ -182,7 +182,7 @@ class Ui_MainWindow(object):
         self.parking_3.setStyleSheet("background-color: rgba(55, 227, 28, 50%);\n"
 "border-radius: 10px;\n"
 "border-width: 1px;\n"
-"border-color:rgba(55, 227, 28, 50%);\n"
+"\n"
 "")
         self.parking_3.setObjectName("parking_3")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.parking_3)
@@ -232,7 +232,7 @@ class Ui_MainWindow(object):
         self.parking_4.setStyleSheet("background-color: rgba(55, 227, 28, 50%);\n"
 "border-radius: 10px;\n"
 "border-width: 1px;\n"
-"border-color:rgba(55, 227, 28, 50%);\n"
+"\n"
 "")
         self.parking_4.setObjectName("parking_4")
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.parking_4)
@@ -282,7 +282,7 @@ class Ui_MainWindow(object):
         self.parking_5.setStyleSheet("background-color: rgba(55, 227, 28, 50%);\n"
 "border-radius: 10px;\n"
 "border-width: 1px;\n"
-"border-color:rgba(55, 227, 28, 50%);\n"
+"\n"
 "")
         self.parking_5.setObjectName("parking_5")
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.parking_5)
@@ -444,6 +444,21 @@ class Ui_MainWindow(object):
         self.warning_off_light.setObjectName("warning_off_light")
         self.horizontalLayout_9.addWidget(self.warning_off_light, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
         self.verticalLayout_8.addWidget(self.frame_31)
+        self.warning_message_box = QtWidgets.QLabel(self.groupBox)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.warning_message_box.sizePolicy().hasHeightForWidth())
+        self.warning_message_box.setSizePolicy(sizePolicy)
+        self.warning_message_box.setStyleSheet("border-radius: 5px;\n"
+"border-style: solid;\n"
+"border-color: white;\n"
+"border-width:2px;\n"
+"background-color: white;\n"
+"")
+        self.warning_message_box.setText("")
+        self.warning_message_box.setObjectName("warning_message_box")
+        self.verticalLayout_8.addWidget(self.warning_message_box)
         self.horizontalLayout_10.addWidget(self.groupBox)
         self.horizontalLayout.addWidget(self.frame_4)
         self.frame_5 = QtWidgets.QFrame(self.frame_3)

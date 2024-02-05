@@ -32,8 +32,10 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
         self.subscriber_topic = "Parking Updates - xix277"
         self.subscriber_id = "Parking_Subscriber"
         self.subscriber_client = None
-        self.subscriber_payload = {}
-
+        self.subscriber_payload = {} # parking spots will be a list of True or False - True for empty, False for full
+        self.current_parking_spots = [self.parking_1, self.parking_2, self.parking_3, self.parking_4, self.parking_5]
+        self.which_parking_spots_full = [True, True, True, True, True]
+        self.prev_warning_msg_feedback = ""
 
         self.mqttBroker = "broker.hivemq.com"
         
@@ -69,7 +71,16 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
         msg = "OFF"
         self.publisher_payload["ON_OFF"] = msg
         self.__publish(msg)
+    
+    def update_warning_msg_feedback(self):
         
+        if "Warning_Message_Received" in self.subscriber_payload.keys():
+            feedbackmsg = self.subscriber_payload["Warning_Message_Recieved"]
+
+            if feedbackmsg != self.prev_warning_msg_feedback:
+                self.warning_message_box.setText(feedbackmsg)
+                self.prev_warning_msg_feedback = feedbackmsg
+
         
     def publisher_connect_mqtt(self):
         """
@@ -104,19 +115,50 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
                 print("Subscriber Connected to MQTT Broker!")
             else:
                 print("Failed to connect, return cod %d\n", rc)
-        self.subscriber_client = mqtt.Client(self.subscriber_id)
+        self.subscriber_client = mqtt.Client(self.subscriber_id, userdata={"ui":self})
         self.subscriber_client.on_connect = on_connect
         self.subscriber_client.connect(self.mqttBroker)
 
+    def update_temperature(self):
+        if "Temperature" in self.subscriber_payload.keys():
+            temp = self.subscriber_payload["Temperature"]
+            self.temperature_textbox.setText(str(temp))
+            # self.temperature_textbox
+
+    def update_parking_spots(self):
+
+        if "Parking_Spots" in self.subscriber_payload.keys():
+
+            for idx, spot in enumerate(self.subscriber_payload["Parking_Spots"]):
+                
+                # if parking spot is empty - set color to green
+                if self.which_parking_spots_full[idx]:
+                    self.current_parking_spots[idx].setStyleSheet("background-color: rgba(55, 227, 28, 50%);"
+                                                                  "border-radius: 10px;"
+                                                                  "border-width: 1px;")
+                # set color to red if parking spot is full
+                else:
+                    self.current_parking_spots[idx].setStyleSheet("background-color: rgba(200,0 , 0, 50%);"
+                                                                  "border-radius: 10px;"
+                                                                  "border-width: 1px;")
+                    
+            self.which_parking_spots_full = self.subscriber_payload["Parking_Spots"]
+        
+        
+
+
+        pass
 
     def subscribe(self):
         """
         Subscribe to incoming Payload
         """
         def on_message(client, userdata, msg):
-            self.subscriber_payload = json.loads(msg.payload)    
-            # self.temperature_textbox.setText(str(self.subscriber_payload))
-            print(self.subscriber_payload)
+            gui = userdata["ui"]
+            self.subscriber_payload = json.loads(msg.payload)
+            gui.update_temperature()
+            gui.update_parking_spots()
+            gui.update_warning_msg_feedback()
 
 
         self.subscriber_client.subscribe(self.subscriber_topic)
@@ -131,7 +173,8 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
         if not msg.strip() == '':
             print(msg)
             self.publisher_payload["DisplayBoardMsg"] = msg
-            self.__publish(msg)    
+            self.__publish(msg)
+            self.Display_Board_Message_Box.setText("")    
     
     def closeEvent(self, event: QCloseEvent) -> None:
         """

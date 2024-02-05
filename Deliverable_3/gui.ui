@@ -119,7 +119,7 @@ border-radius: 5px;
              <string notr="true">background-color: rgba(55, 227, 28, 50%);
 border-radius: 10px;
 border-width: 1px;
-border-color:rgba(55, 227, 28, 50%);
+
 </string>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -261,7 +261,7 @@ border-bottom-right-radius: 5px;</string>
              <string notr="true">background-color: rgba(55, 227, 28, 50%);
 border-radius: 10px;
 border-width: 1px;
-border-color:rgba(55, 227, 28, 50%);
+
 </string>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -379,7 +379,7 @@ border-bottom-right-radius: 5px;</string>
              <string notr="true">background-color: rgba(55, 227, 28, 50%);
 border-radius: 10px;
 border-width: 1px;
-border-color:rgba(55, 227, 28, 50%);
+
 </string>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -497,7 +497,7 @@ border-bottom-right-radius: 5px;</string>
              <string notr="true">background-color: rgba(55, 227, 28, 50%);
 border-radius: 10px;
 border-width: 1px;
-border-color:rgba(55, 227, 28, 50%);
+
 </string>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -615,7 +615,7 @@ border-bottom-right-radius: 5px;</string>
              <string notr="true">background-color: rgba(55, 227, 28, 50%);
 border-radius: 10px;
 border-width: 1px;
-border-color:rgba(55, 227, 28, 50%);
+
 </string>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_8">
@@ -968,6 +968,27 @@ border-radius: 25px;</string>
                  </widget>
                 </item>
                </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="warning_message_box">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">border-radius: 5px;
+border-style: solid;
+border-color: white;
+border-width:2px;
+background-color: white;
+</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
               </widget>
              </item>
             </layout>
