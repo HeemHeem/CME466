@@ -34,6 +34,7 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
         self.warning_on_off_flg = False
         self.warning_on_button.clicked.connect(self.turn_on_warning)
         self.warning_off_button.clicked.connect(self.turn_off_warning)
+        self.SendDisplayMessage.clicked.connect(self.sendtodisplay)
         
 
     def turn_on_warning(self):
@@ -45,8 +46,9 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
         # Turn on warning
         self.warning_on_light.setStyleSheet("background-color: rgba(0,200,0, 80%); border-radius: 25px")
         self.warning_off_light.setStyleSheet("background-color: rgba(200,0,0, 30%); border-radius: 25px")
-        self.publisher_payload["ON_OFF"] = "ON"
-        self.__publish()
+        msg = "ON"
+        self.publisher_payload["ON_OFF"] = msg
+        self.__publish(msg)
         
     def turn_off_warning(self):
         """
@@ -56,8 +58,10 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
         # Turn off Warning
         self.warning_off_light.setStyleSheet("background-color: rgba(200,0,0, 80%); border-radius: 25px")
         self.warning_on_light.setStyleSheet("background-color: rgba(0,200,0, 30%); border-radius: 25px")
-        self.publisher_payload["ON_OFF"] = "OFF"
-        self.__publish()
+        msg = "OFF"
+        self.publisher_payload["ON_OFF"] = msg
+        self.__publish(msg)
+        
         
     def publisher_connect_mqtt(self):
         """
@@ -74,11 +78,12 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
         self.publisher_client.loop_start()
     
 
-    def __publish(self):
+    def __publish(self, msg):
         """
         Publish Outgoing Payload
         """
         sent_msg = json.dumps(self.publisher_payload)
+        print(f"Send {msg} To Parking Lot")
         self.publisher_client.publish(self.publisher_topic, sent_msg)
 
 
@@ -94,8 +99,7 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
         self.subscriber_client = mqtt.Client(self.subscriber_id)
         self.subscriber_client.on_connect = on_connect
         self.subscriber_client.connect(self.mqttBroker)
-        # self.subscribe()
-        # self.subscriber_client.loop_start()
+
 
     def subscribe(self):
         """
@@ -105,15 +109,29 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
             self.subscriber_payload = json.loads(msg.payload)
             print(self.subscriber_payload)
 
-        # print("HERE")
+
         self.subscriber_client.subscribe(self.subscriber_topic)
-        # print("here")
         self.subscriber_client.on_message = on_message
+        self.subscriber_client.loop_start()
     
+    def sendtodisplay(self):
+        """
+        Send message to parking lot display board
+        """
+        msg = self.Display_Board_Message_Box.toPlainText()
+        if not msg.strip() == '':
+            print(msg)
+            self.publisher_payload["DisplayBoardMsg"] = msg
+            self.__publish(msg)    
     
     def closeEvent(self, a0: QCloseEvent) -> None:
+        """
+        Disconnect on close
+        """
         self.subscriber_client.loop_stop()
+        self.subscriber_client.disconnect()
         self.publisher_client.loop_stop()
+        self.publisher_client.disconnect()
         print("Closed Subscriber")
         print("Closed Publisher")
         a0.accept() # accept event
@@ -128,14 +146,5 @@ if __name__== "__main__":
     mainWindow.publisher_connect_mqtt()
     mainWindow.subscriber_connect_mqtt()
     mainWindow.subscribe()
-    mainWindow.subscriber_client.loop_start()
-    # mainWindow.publisher_client.loop_stop()
-
-    # try:
-    #     mainWindow.subscriber_connect_mqtt()
-    #     mainWindow.subscribe()
-    #     mainWindow.publisher_client.loop_stop()
-    #     mainWindow.subscriber_client.loop_forever()
-    # except KeyboardInterrupt:
-    # mainWindow.subscriber_client.loop_stop()
+    # mainWindow.subscriber_client.loop_start()
     sys.exit(app.exec())
