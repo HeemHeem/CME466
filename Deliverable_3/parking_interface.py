@@ -1,5 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
+
+from PyQt5.QtGui import QCloseEvent
 import main_window_ui
 import json as json
 import paho.mqtt.client as mqtt
@@ -74,7 +76,7 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
 
     def __publish(self):
         """
-        Publish Payload
+        Publish Outgoing Payload
         """
         sent_msg = json.dumps(self.publisher_payload)
         self.publisher_client.publish(self.publisher_topic, sent_msg)
@@ -89,17 +91,51 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
                 print("Subscriber Connected to MQTT Broker!")
             else:
                 print("Failed to connect, return cod %d\n", rc)
-        self.subscriber_client = mqtt.Client(self.subscriber_client)
+        self.subscriber_client = mqtt.Client(self.subscriber_id)
         self.subscriber_client.on_connect = on_connect
         self.subscriber_client.connect(self.mqttBroker)
+        # self.subscribe()
+        # self.subscriber_client.loop_start()
 
     def subscribe(self):
-        pass
+        """
+        Subscribe to incoming Payload
+        """
+        def on_message(client, userdata, msg):
+            self.subscriber_payload = json.loads(msg.payload)
+            print(self.subscriber_payload)
+
+        # print("HERE")
+        self.subscriber_client.subscribe(self.subscriber_topic)
+        # print("here")
+        self.subscriber_client.on_message = on_message
+    
+    
+    def closeEvent(self, a0: QCloseEvent) -> None:
+        self.subscriber_client.loop_stop()
+        self.publisher_client.loop_stop()
+        print("Closed Subscriber")
+        print("Closed Publisher")
+        a0.accept() # accept event
+
+        
+
 
 if __name__== "__main__":
     app = QtWidgets.QApplication(sys.argv)
     mainWindow=ParkingLotInterface()
     mainWindow.show()
     mainWindow.publisher_connect_mqtt()
-    mainWindow.publisher_client.loop_stop()
+    mainWindow.subscriber_connect_mqtt()
+    mainWindow.subscribe()
+    mainWindow.subscriber_client.loop_start()
+    # mainWindow.publisher_client.loop_stop()
+
+    # try:
+    #     mainWindow.subscriber_connect_mqtt()
+    #     mainWindow.subscribe()
+    #     mainWindow.publisher_client.loop_stop()
+    #     mainWindow.subscriber_client.loop_forever()
+    # except KeyboardInterrupt:
+    # mainWindow.subscriber_client.loop_stop()
     sys.exit(app.exec())
