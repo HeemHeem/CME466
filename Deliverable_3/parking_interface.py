@@ -1,3 +1,11 @@
+"""
+Deliverable 3
+Jason Xie
+xix277
+11255431
+
+
+"""
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 

@@ -87,7 +87,7 @@ def subscribe(client: mqtt):
         #     print(f"Recieved '{msg_in}' from topic '{topic}'")
         # print(f"Latency from '{broker}' is '{latency_time_ms:.2f}' ms for topic '{topic}'")
         # print(f"Latency from '{broker}' is '{latency_time_ms:.2f}' ms for topic '{topic}' with encryption")
-        print(snd_time["ON_OFF"])
+        print(snd_time)
 
     client.subscribe(topic)
     client.on_message = on_message

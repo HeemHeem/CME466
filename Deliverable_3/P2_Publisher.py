@@ -12,19 +12,20 @@ import json as json
 from cryptography.fernet import Fernet
 import paho.mqtt.client as mqtt
 
-# broker = 'broker.hivemq.com'
+broker = 'broker.hivemq.com'
 # broker = 'test.mosquitto.org'
-broker = "broker.emqx.io"
+# broker = "broker.emqx.io"
 # broker = "public.mqtthq.com"
 
-# encryption
-with open("key.txt", 'rb') as f:
-    key = f.read()
+# # encryption
+# with open("key.txt", 'rb') as f:
+#     key = f.read()
 
-fern = Fernet(key) # create Fernet object
+# fern = Fernet(key) # create Fernet object
 
 # print(key)
-topic = "Pain Land 2024 2"
+# topic = "Pain Land 2024 2"
+topic = "Parking Updates - xix277"
 client_id = "test_xix277_1"
 
 def connect_mqtt() -> mqtt.Client:
@@ -58,8 +59,9 @@ def publish(client):
             time.sleep(1)
 
             #create datetime object
-            dt = datetime.datetime.now()
-            time_smp = dt.timestamp()
+            # dt = datetime.datetime.now()
+            # time_smp = dt.timestamp()
+            time_smp = {"Hello":"World"}
             time_smp_json = json.dumps(time_smp) # message to be sent
             
 
@@ -80,10 +82,10 @@ def publish(client):
 
             # result = client.publish(topic, b"$" + msg_in, qos=1, retain=False)
             
-            # result: [0, 1]
+            result: [0, 1]
             status = result[0]
             if status == 0:
-                print(f"Send `{dt}` to topic `{topic}`")
+                print(f"Send `{time_smp}` to topic `{topic}`")
             else:
                 print(f"Failed to send message to topic {topic}")
 
@@ -94,7 +96,7 @@ def publish(client):
 
 def run():
     client = connect_mqtt()
-    # client.loop_start()
+    client.loop_start()
     publish(client)
 
 
