@@ -40,6 +40,7 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
         self.current_parking_spots = [self.parking_1, self.parking_2, self.parking_3, self.parking_4, self.parking_5]
         self.which_parking_spots_full = [True, True, True, True, True]
         self.prev_warning_msg_feedback = ""
+        # self.subscriber_payload["Parking_Spots"] = self.which_parking_spots_full
 
         
         
@@ -78,7 +79,7 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
     def update_warning_msg_feedback(self):
         
         if "Warning_Message_Received" in self.subscriber_payload.keys():
-            feedbackmsg = self.subscriber_payload["Warning_Message_Recieved"]
+            feedbackmsg = self.subscriber_payload["Warning_Message_Received"]
 
             if feedbackmsg != self.prev_warning_msg_feedback:
                 self.warning_message_box.setText(feedbackmsg)
@@ -125,32 +126,28 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
     def update_temperature(self):
         if "Temperature" in self.subscriber_payload.keys():
             temp = self.subscriber_payload["Temperature"]
-            self.temperature_textbox.setText(str(temp))
+            self.temperature_textbox.setText(str(temp) + " C")
             # self.temperature_textbox
 
     def update_parking_spots(self):
 
         if "Parking_Spots" in self.subscriber_payload.keys():
-
-            for idx, spot in enumerate(self.subscriber_payload["Parking_Spots"]):
-                
-                # if parking spot is empty - set color to green
-                if self.which_parking_spots_full[idx]:
-                    self.current_parking_spots[idx].setStyleSheet("background-color: rgba(55, 227, 28, 50%);"
-                                                                  "border-radius: 10px;"
-                                                                  "border-width: 1px;")
-                # set color to red if parking spot is full
-                else:
-                    self.current_parking_spots[idx].setStyleSheet("background-color: rgba(200,0 , 0, 50%);"
-                                                                  "border-radius: 10px;"
-                                                                  "border-width: 1px;")
+            if self.which_parking_spots_full != self.subscriber_payload["Parking_Spots"]:
+                for idx, spot in enumerate(self.subscriber_payload["Parking_Spots"]):
                     
+                    if spot: 
+                    # if parking spot is empty - set color to green
+                
+                        self.current_parking_spots[idx].setStyleSheet("background-color: rgba(55, 227, 28, 50%);"
+                                                                    "border-radius: 10px;"
+                                                                    "border-width: 1px;")
+                    # set color to red if parking spot is full
+                    else:
+                        self.current_parking_spots[idx].setStyleSheet("background-color: rgba(200,0 , 0, 50%);"
+                                                                    "border-radius: 10px;"
+                                                                    "border-width: 1px;")
+                            
             self.which_parking_spots_full = self.subscriber_payload["Parking_Spots"]
-        
-        
-
-
-        pass
 
     def subscribe(self):
         """
@@ -158,8 +155,9 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
         """
         def on_message(client, userdata, msg):
             gui = userdata["ui"]
-            self.subscriber_payload = json.loads(msg.payload)
+            gui.subscriber_payload = json.loads(msg.payload)
             gui.update_temperature()
+            # print(self.subscriber_payload)
             gui.update_parking_spots()
             gui.update_warning_msg_feedback()
 
