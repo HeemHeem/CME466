@@ -7,11 +7,8 @@ xix277
 
 """
 import time as time
-import datetime as datetime
 import json as json
 import paho.mqtt.client as mqtt
-import math as m
-# import D1_SW_LED_and_Sound_Sensor as Edge_Sensor
 import PCF8591 as ADC
 import RPi.GPIO as GPIO
 import math
@@ -164,6 +161,8 @@ class Parking_Lot(object):
             self.prev_warning = self.subscriber_payload["ON_OFF"]
     
     def DisplayBoard(self):
+        """Display incoming message
+        """
         if "DisplayBoardMsg" in self.subscriber_payload.keys():
                 if self.subscriber_payload["DisplayBoardMsg"].strip() == "clear":
                     self.subscriber_payload["DisplayBoardMsg"] = ''
