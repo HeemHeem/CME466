@@ -127,6 +127,8 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
         self.subscriber_client.connect(self.mqttBroker)
 
     def update_temperature(self):
+        """Update temperature on the GUI
+        """
         if "Temperature" in self.subscriber_payload.keys():
             temp = self.subscriber_payload["Temperature"]
             self.temperature_textbox.setText(str(temp) + " C")
