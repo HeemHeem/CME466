@@ -60,6 +60,8 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
         # Turn on warning
         self.warning_on_light.setStyleSheet("background-color: rgba(0,200,0, 80%); border-radius: 25px")
         self.warning_off_light.setStyleSheet("background-color: rgba(200,0,0, 30%); border-radius: 25px")
+        # just add to see
+        # self.setStyleSheet("background-color: rgb(145, 65, 172);")
         msg = "ON"
         self.publisher_payload["ON_OFF"] = msg
         self.__publish(msg)
@@ -72,6 +74,7 @@ class ParkingLotInterface(QtWidgets.QMainWindow, main_window_ui.Ui_MainWindow):
         # Turn off Warning
         self.warning_off_light.setStyleSheet("background-color: rgba(200,0,0, 80%); border-radius: 25px")
         self.warning_on_light.setStyleSheet("background-color: rgba(0,200,0, 30%); border-radius: 25px")
+        # self.setStyleSheet("background-color: lightgray;")
         msg = "OFF"
         self.publisher_payload["ON_OFF"] = msg
         self.__publish(msg)
